@@ -103,6 +103,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)vendor\imgui;$(ProjectDir)vendor\imgui\backends;C:\Users\влад\source\repos\ParanoiaEngine\vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,11 +125,46 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\vendor\imgui\imgui.cpp" />
+    <ClCompile Include="..\vendor\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\vendor\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\vendor\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\vendor\imgui\imgui_impl_sdl3.cpp" />
+    <ClCompile Include="..\vendor\imgui\imgui_tables.cpp" />
+    <ClCompile Include="..\vendor\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\Core\window.cpp" />
+    <ClCompile Include="src\Graphics\mesh.cpp" />
+    <ClCompile Include="src\Graphics\shaderProgram.cpp" />
+    <ClCompile Include="src\Graphics\texture.cpp" />
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="basic.frag" />
-    <None Include="basic.vert" />
+    <None Include=".vs\slnx.sqlite" />
+    <None Include=".vs\VSWorkspaceState.json" />
+    <None Include="imgui.ini" />
+    <None Include="Shaders\basic.frag" />
+    <None Include="Shaders\basic.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\vendor\imgui\imconfig.h" />
+    <ClInclude Include="..\vendor\imgui\imgui.h" />
+    <ClInclude Include="..\vendor\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\vendor\imgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="..\vendor\imgui\imgui_impl_sdl3.h" />
+    <ClInclude Include="..\vendor\imgui\imgui_internal.h" />
+    <ClInclude Include="..\vendor\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\vendor\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\vendor\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\Core\input.h" />
+    <ClInclude Include="src\Core\time.h" />
+    <ClInclude Include="src\Core\window.h" />
+    <ClInclude Include="src\Graphics\mesh.h" />
+    <ClInclude Include="src\Graphics\shaderProgram.h" />
+    <ClInclude Include="src\Graphics\texture.h" />
+    <ClInclude Include="vendor\stb_image.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\HeroKnight_Idle_0.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
