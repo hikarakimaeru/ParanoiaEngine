@@ -39,31 +39,34 @@
     <ClCompile Include="..\vendor\imgui\imgui_widgets.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\window.cpp">
+    <ClCompile Include="src\Engine\Core\window.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\shaderProgram.cpp">
+    <ClCompile Include="src\Engine\Graphics\shaderProgram.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\texture.cpp">
+    <ClCompile Include="src\Engine\Graphics\texture.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\main.cpp">
+    <ClCompile Include="src\Sandbox\main.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\camera.cpp">
+    <ClCompile Include="src\Engine\Graphics\camera.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\transform.cpp">
+    <ClCompile Include="src\Engine\Core\transform.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scene\gameObject.cpp">
+    <ClCompile Include="src\Engine\Scene\gameObject.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scene\scene.cpp">
+    <ClCompile Include="src\Engine\Scene\scene.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\batchRenderer.cpp">
+    <ClCompile Include="src\Engine\Graphics\batchRenderer.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sandbox\game.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -106,37 +109,40 @@
     <ClInclude Include="..\vendor\imgui\imgui_impl_opengl3_loader.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\input.h">
+    <ClInclude Include="src\Engine\Core\input.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\time.h">
+    <ClInclude Include="src\Engine\Core\time.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\window.h">
+    <ClInclude Include="src\Engine\Core\window.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\Graphics\shaderProgram.h">
+    <ClInclude Include="src\Engine\Graphics\shaderProgram.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\Graphics\texture.h">
+    <ClInclude Include="src\Engine\Graphics\texture.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="vendor\stb_image.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\Graphics\camera.h">
+    <ClInclude Include="src\Engine\Graphics\camera.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\transform.h">
+    <ClInclude Include="src\Engine\Core\transform.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scene\gameObject.h">
+    <ClInclude Include="src\Engine\Scene\gameObject.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scene\scene.h">
+    <ClInclude Include="src\Engine\Scene\scene.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="src\Graphics\batchRenderer.h">
+    <ClInclude Include="src\Engine\Graphics\batchRenderer.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sandbox\game.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

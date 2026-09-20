@@ -132,15 +132,16 @@
     <ClCompile Include="..\vendor\imgui\imgui_impl_sdl3.cpp" />
     <ClCompile Include="..\vendor\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\vendor\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="src\Core\transform.cpp" />
-    <ClCompile Include="src\Core\window.cpp" />
-    <ClCompile Include="src\Graphics\batchRenderer.cpp" />
-    <ClCompile Include="src\Graphics\camera.cpp" />
-    <ClCompile Include="src\Graphics\shaderProgram.cpp" />
-    <ClCompile Include="src\Graphics\texture.cpp" />
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Scene\gameObject.cpp" />
-    <ClCompile Include="src\Scene\scene.cpp" />
+    <ClCompile Include="src\Engine\Core\transform.cpp" />
+    <ClCompile Include="src\Engine\Core\window.cpp" />
+    <ClCompile Include="src\Engine\Graphics\batchRenderer.cpp" />
+    <ClCompile Include="src\Engine\Graphics\camera.cpp" />
+    <ClCompile Include="src\Engine\Graphics\shaderProgram.cpp" />
+    <ClCompile Include="src\Engine\Graphics\texture.cpp" />
+    <ClCompile Include="src\Sandbox\game.cpp" />
+    <ClCompile Include="src\Sandbox\main.cpp" />
+    <ClCompile Include="src\Engine\Scene\gameObject.cpp" />
+    <ClCompile Include="src\Engine\Scene\scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".vs\slnx.sqlite" />
@@ -159,16 +160,17 @@
     <ClInclude Include="..\vendor\imgui\imstb_rectpack.h" />
     <ClInclude Include="..\vendor\imgui\imstb_textedit.h" />
     <ClInclude Include="..\vendor\imgui\imstb_truetype.h" />
-    <ClInclude Include="src\Core\input.h" />
-    <ClInclude Include="src\Core\time.h" />
-    <ClInclude Include="src\Core\transform.h" />
-    <ClInclude Include="src\Core\window.h" />
-    <ClInclude Include="src\Graphics\batchRenderer.h" />
-    <ClInclude Include="src\Graphics\camera.h" />
-    <ClInclude Include="src\Graphics\shaderProgram.h" />
-    <ClInclude Include="src\Graphics\texture.h" />
-    <ClInclude Include="src\Scene\gameObject.h" />
-    <ClInclude Include="src\Scene\scene.h" />
+    <ClInclude Include="src\Engine\Core\input.h" />
+    <ClInclude Include="src\Engine\Core\time.h" />
+    <ClInclude Include="src\Engine\Core\transform.h" />
+    <ClInclude Include="src\Engine\Core\window.h" />
+    <ClInclude Include="src\Engine\Graphics\batchRenderer.h" />
+    <ClInclude Include="src\Engine\Graphics\camera.h" />
+    <ClInclude Include="src\Engine\Graphics\shaderProgram.h" />
+    <ClInclude Include="src\Engine\Graphics\texture.h" />
+    <ClInclude Include="src\Engine\Scene\gameObject.h" />
+    <ClInclude Include="src\Engine\Scene\scene.h" />
+    <ClInclude Include="src\Sandbox\game.h" />
     <ClInclude Include="vendor\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
