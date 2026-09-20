@@ -2,6 +2,8 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <glm/gtc/type_ptr.hpp>
+
 
 ShaderProgram::ShaderProgram(const std::filesystem::path& vertPath, const std::filesystem::path& fragPath) {
     std::string vertex_shader_source = loadShaderSource(vertPath);
@@ -79,4 +81,14 @@ void ShaderProgram::checkCompileErrors(GLuint shader, const std::string& type) {
                 << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
         }
     }
+}
+
+void ShaderProgram::setInt(const std::string& name, int value) const {
+    GLint location = glGetUniformLocation(program_id, name.c_str());
+    glUniform1i(location, value);
+}
+
+void ShaderProgram::setMatrix4(const std::string& name, const glm::mat4& matrix) const {
+    GLint location = glGetUniformLocation(program_id, name.c_str());
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }

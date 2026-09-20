@@ -132,11 +132,15 @@
     <ClCompile Include="..\vendor\imgui\imgui_impl_sdl3.cpp" />
     <ClCompile Include="..\vendor\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\vendor\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\Core\transform.cpp" />
     <ClCompile Include="src\Core\window.cpp" />
-    <ClCompile Include="src\Graphics\mesh.cpp" />
+    <ClCompile Include="src\Graphics\batchRenderer.cpp" />
+    <ClCompile Include="src\Graphics\camera.cpp" />
     <ClCompile Include="src\Graphics\shaderProgram.cpp" />
     <ClCompile Include="src\Graphics\texture.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Scene\gameObject.cpp" />
+    <ClCompile Include="src\Scene\scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".vs\slnx.sqlite" />
@@ -157,10 +161,14 @@
     <ClInclude Include="..\vendor\imgui\imstb_truetype.h" />
     <ClInclude Include="src\Core\input.h" />
     <ClInclude Include="src\Core\time.h" />
+    <ClInclude Include="src\Core\transform.h" />
     <ClInclude Include="src\Core\window.h" />
-    <ClInclude Include="src\Graphics\mesh.h" />
+    <ClInclude Include="src\Graphics\batchRenderer.h" />
+    <ClInclude Include="src\Graphics\camera.h" />
     <ClInclude Include="src\Graphics\shaderProgram.h" />
     <ClInclude Include="src\Graphics\texture.h" />
+    <ClInclude Include="src\Scene\gameObject.h" />
+    <ClInclude Include="src\Scene\scene.h" />
     <ClInclude Include="vendor\stb_image.h" />
   </ItemGroup>
   <ItemGroup>

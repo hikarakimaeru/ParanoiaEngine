@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 #include <filesystem>
 #include <string>
+#include <glm/glm.hpp>
 
 class ShaderProgram {
 public:
@@ -16,6 +17,9 @@ public:
     void unuse() const;
 
     GLuint getProgramId() const;
+
+    void setInt(const std::string& name, int value) const;
+    void setMatrix4(const std::string& name, const glm::mat4& matrix) const;
 
 private:
     GLuint program_id = 0;

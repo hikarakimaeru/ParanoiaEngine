@@ -14,57 +14,57 @@
 #include "imgui_impl_opengl3.h"
 
 // Engine Core
-#include "Core/Window.h"
-#include "Core/Time.h"
-#include "Core/Input.h"
+#include "Core/window.h"
+#include "Core/time.h"
+#include "Core/input.h"
 
 // Engine Graphics
-#include "Graphics/Texture.h"
-#include "Graphics/Mesh.h"
-#include "Graphics/ShaderProgram.h"
+#include "Graphics/texture.h"
+#include "Graphics/camera.h"
+#include "Graphics/batchRenderer.h" // 1. Подключаем новый Batch Renderer
+
+// Engine Scene System
+#include "Scene/gameObject.h"
+#include "Scene/Scene.h"
 
 int main(int argc, char* argv[]) {
-    std::cout << std::format("Welcome to the engine!\n");
+    std::cout << std::format("Welcome to ParanoiaEngine!\n");
 
-    Window window("ParanoiaEngine", 800, 600);
+    int width = 800;
+    int height = 600;
+
+    Window window("ParanoiaEngine", width, height);
+
+    // 2. Инициализируем batchRenderer вместо старого Renderer
+    batchRenderer renderer;
+    renderer.init(width, height);
 
     // ImGui Initialization
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
     ImGui::StyleColorsDark();
     ImGui_ImplSDL3_InitForOpenGL(window.getWin(), window.getGl_Context());
     ImGui_ImplOpenGL3_Init("#version 330");
 
-    // Geometry & Assets
-    float vertices[] = {
-        1.0f, 0.0f,  1.0f, 0.0f, // верхний правый
-        1.0f, 1.0f,  1.0f, 1.0f, // нижний правый
-        0.0f, 1.0f,  0.0f, 1.0f, // нижний левый
-        0.0f, 0.0f,  0.0f, 0.0f  // верхний левый
-    };
-
-    unsigned int indices[] = {
-        0, 1, 3,
-        1, 2, 3
-    };
-
-    Mesh mesh(vertices, indices);
+    // Assets
+    // (Массив vertices и объект Mesh больше НЕ нужны!)
     Texture texture("assets/HeroKnight_Idle_0.png");
-    ShaderProgram shader_program("Shaders/basic.vert", "Shaders/basic.frag");
+    Camera camera(0.0f, (float)width, (float)height, 0.0f);
 
-    // Shader Uniforms Setup
-    shader_program.use();
-    GLuint projection_loc = glGetUniformLocation(shader_program.getProgramId(), "projection");
-    GLuint transform_loc = glGetUniformLocation(shader_program.getProgramId(), "transform");
-    GLuint tex_loc = glGetUniformLocation(shader_program.getProgramId(), "u_Texture");
-    glUniform1i(tex_loc, 0);
+    // Создаем сцену и добавляем объекты
+    Scene scene;
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    gameObject* player = new gameObject("Player", &texture);
+    player->setPosition(100.0f, 100.0f);
+    player->transform.size = { 200.0f, 150.0f };
+    scene.addObject(player);
 
-    // State Variables
-    float position[2] = { 100.0f, 100.0f };
-    float size[2] = { 200.0f, 150.0f };
+    gameObject* enemy = new gameObject("Enemy", &texture);
+    enemy->setPosition(400.0f, 300.0f);
+    enemy->transform.size = { 100.0f, 100.0f };
+    scene.addObject(enemy);
+
     float speed = 300.0f;
 
     Input input;
@@ -83,38 +83,39 @@ int main(int argc, char* argv[]) {
             input.processEvent(event);
         }
 
-        // Gameplay Update
-        if (input.isHeld(SDL_SCANCODE_W)) position[1] -= speed * dt;
-        if (input.isHeld(SDL_SCANCODE_S)) position[1] += speed * dt;
-        if (input.isHeld(SDL_SCANCODE_A)) position[0] -= speed * dt;
-        if (input.isHeld(SDL_SCANCODE_D)) position[0] += speed * dt;
+        // Управление игроком
+        if (!io.WantCaptureKeyboard) {
+            if (input.isHeld(SDL_SCANCODE_W)) player->move(0.0f, -speed * dt);
+            if (input.isHeld(SDL_SCANCODE_S)) player->move(0.0f, speed * dt);
+            if (input.isHeld(SDL_SCANCODE_A)) player->move(-speed * dt, 0.0f);
+            if (input.isHeld(SDL_SCANCODE_D)) player->move(speed * dt, 0.0f);
+        }
 
-        // UI Frame
+        // Обновляем логику сцены
+        scene.update(dt);
+
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL3_NewFrame();
         ImGui::NewFrame();
 
+        // Инспектор ImGui
         ImGui::Begin("Engine Inspector");
-        ImGui::SliderFloat2("Position (X, Y)", position, 0.0f, 800.0f);
-        ImGui::SliderFloat2("Size (X, Y)", size, 10.0f, 500.0f);
+        ImGui::Text("Player Controls");
+        ImGui::DragFloat2("Player Pos", &player->transform.position.x, 1.0f);
+        ImGui::DragFloat("Player Rotation", &player->transform.rotation, 1.0f);
+        ImGui::Separator();
+        ImGui::Text("Enemy Controls");
+        ImGui::DragFloat2("Enemy Pos", &enemy->transform.position.x, 1.0f);
         ImGui::End();
 
-        // Render
+        // Камера следит за игроком
+        camera.setPosition(glm::vec3(player->getPosition().x - ((float)width / 2),
+            player->getPosition().y - ((float)height / 2), 0.0f));
+
         glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        shader_program.use();
-
-        glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(position[0], position[1], 0.0f));
-        transform = glm::scale(transform, glm::vec3(size[0], size[1], 1.0f));
-        glm::mat4 projection = glm::ortho(0.0f, 800.0f, 600.0f, 0.0f, -1.0f, 1.0f);
-
-        glUniformMatrix4fv(projection_loc, 1, GL_FALSE, glm::value_ptr(projection));
-        glUniformMatrix4fv(transform_loc, 1, GL_FALSE, glm::value_ptr(transform));
-
-        texture.bind(0);
-        mesh.bind();
-        glDrawElements(GL_TRIANGLES, mesh.getIndexCount(), GL_UNSIGNED_INT, nullptr);
+        scene.draw(renderer, camera);
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -122,7 +123,6 @@ int main(int argc, char* argv[]) {
         SDL_GL_SwapWindow(window.getWin());
     }
 
-    // Cleanup
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL3_Shutdown();
     ImGui::DestroyContext();
