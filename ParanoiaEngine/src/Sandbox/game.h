@@ -23,11 +23,13 @@ private:
     batchRenderer renderer;
     Camera camera;
     Scene scene;
-    Texture playerTexture;
     Input input;
 
+    Texture playerTexture;
+    Texture enemyTexture;
+
     gameObject* player = nullptr;
-    gameObject* enemy = nullptr;
+    std::vector<gameObject*> enemies; 
 
     bool running = true;
 };

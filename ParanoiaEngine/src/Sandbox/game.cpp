@@ -6,11 +6,14 @@
 #include "imgui_impl_sdl3.h"
 #include "imgui_impl_opengl3.h"
 #include <iostream>
+#include "../Engine/Core/collider.h"
+#include "../Engine/Scene/entityFactory.h"
 
 Game::Game()
     : window("ParanoiaEngine - Game Sandbox", 800, 600),
     camera(0.0f, 800.0f, 600.0f, 0.0f),
-    playerTexture("assets/HeroKnight_Idle_0.png")
+    playerTexture("assets/HeroKnight_Idle_0.png"),
+    enemyTexture("assets/goblin run.png")
 {
     // 1. Инициализация рендерера
     renderer.init(800, 600);
@@ -28,10 +31,9 @@ Game::Game()
     player->transform.size = { 200.0f, 150.0f };
     scene.addObject(player);
 
-    enemy = new gameObject("Enemy", &playerTexture);
-    enemy->setPosition(400.0f, 300.0f);
-    enemy->transform.size = { 100.0f, 100.0f };
-    scene.addObject(enemy);
+    gameObject* goblin = EntityFactory::createEnemy(scene, "Goblin", &enemyTexture, { 400.0f, 300.0f });
+    enemies.push_back(goblin);
+
 }
 
 Game::~Game() {
@@ -57,6 +59,11 @@ void Game::run() {
 
         processInput(dt);
         update(dt);
+        for (gameObject* goblin : enemies) {
+            if (Collider::checkCollision(*player, *goblin)) {
+                Collider::resolveCollision(*player, *goblin);
+            }
+        }
         render();
 
         SDL_GL_SwapWindow(window.getWin());
@@ -98,10 +105,11 @@ void Game::render() {
     ImGui::Begin("Engine Inspector");
     ImGui::Text("Player Controls");
     ImGui::DragFloat2("Player Pos", &player->transform.position.x, 1.0f);
-    ImGui::DragFloat("Player Rotation", &player->transform.rotation, 1.0f);
-    ImGui::Separator();
-    ImGui::Text("Enemy Controls");
-    ImGui::DragFloat2("Enemy Pos", &enemy->transform.position.x, 1.0f);
+    if (!enemies.empty()) {
+        ImGui::Separator();
+        ImGui::Text("Goblin Controls");
+        ImGui::DragFloat2("Goblin Pos", &enemies[0]->transform.position.x, 1.0f);
+    }
     ImGui::End();
 
     scene.draw(renderer, camera);

@@ -169,12 +169,14 @@
     <ClInclude Include="src\Engine\Graphics\camera.h" />
     <ClInclude Include="src\Engine\Graphics\shaderProgram.h" />
     <ClInclude Include="src\Engine\Graphics\texture.h" />
+    <ClInclude Include="src\Engine\Scene\entityFactory.h" />
     <ClInclude Include="src\Engine\Scene\gameObject.h" />
     <ClInclude Include="src\Engine\Scene\scene.h" />
     <ClInclude Include="src\Sandbox\game.h" />
     <ClInclude Include="vendor\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\Downloads\goblin run.png" />
     <Image Include="assets\HeroKnight_Idle_0.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

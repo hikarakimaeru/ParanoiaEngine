@@ -3,7 +3,7 @@
 	#include "../Scene/gameObject.h"
 	#include <algorithm>
 
-	class Colider {
+	class Collider {
 
 	public:
 		static bool checkCollision(const gameObject& a, const gameObject& b) {
@@ -19,7 +19,7 @@
 			return collision_X && collision_Y;
 		}
 
-		static bool resolveCollision(gameObject& a, gameObject& b) {
+		static void resolveCollision(gameObject& a, gameObject& b) {
 			glm::vec2 a_pos = a.getPosition();
 			glm::vec2 a_size = a.transform.size;
 

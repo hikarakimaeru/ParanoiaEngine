@@ -148,9 +148,15 @@
     <ClInclude Include="src\Engine\Core\collider.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Scene\entityFactory.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\HeroKnight_Idle_0.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Downloads\goblin run.png">
       <Filter>Файлы ресурсов</Filter>
     </Image>
   </ItemGroup>
