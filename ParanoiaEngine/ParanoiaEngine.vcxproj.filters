@@ -145,6 +145,9 @@
     <ClInclude Include="src\Sandbox\game.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Core\collider.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\HeroKnight_Idle_0.png">
