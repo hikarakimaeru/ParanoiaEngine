@@ -34,6 +34,12 @@ private:
     Animation playerWalkUp;
     Animation playerIdle;
 
+    Animation skeletonWalkDown;
+    Animation skeletonWalkLeft;
+    Animation skeletonWalkRight;
+    Animation skeletonWalkUp;
+    Animation skeletonIdle;
+
     Texture playerTexture;
     Texture enemyTexture;
 

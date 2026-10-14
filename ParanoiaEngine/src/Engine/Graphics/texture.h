@@ -12,6 +12,9 @@ public:
 
 	void bind(unsigned int slot) const;
 
+	int width = 0;
+	int height = 0;
+
 private:
 	GLuint id = 0;
 };

@@ -44,6 +44,8 @@ public:
 
     void draw(batchRenderer& renderer);
 
+    void setSheetGrid(int cols, int rows);
+
     glm::vec2 getPosition() const;
     void setPosition(const glm::vec2& pos);
     void setPosition(float x, float y);

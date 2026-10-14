@@ -12,8 +12,8 @@
 Game::Game()
     : window("ParanoiaEngine - Game Sandbox", 800, 600),
     camera(0.0f, 800.0f, 600.0f, 0.0f),
-    playerTexture("assets/reaper_2.png"),
-    enemyTexture("assets/goblin/walk/walk1.png")
+    playerTexture("assets/reaper_blade_2.png"),
+    enemyTexture("assets/dotd_skeletonsheet_2.png")
 {
     renderer.init(800, 600);
 
@@ -29,19 +29,31 @@ Game::Game()
     playerWalkUp = { 3, 0, 3, 8.0f };
     playerIdle = { 0, 1, 1, 8.0f };
 
+    skeletonWalkDown = { 0, 0, 3, 8.0f };
+    skeletonWalkLeft = { 1, 0, 3, 8.0f };
+    skeletonWalkRight = { 2, 0, 3, 8.0f };
+    skeletonWalkUp = { 3, 0, 3, 8.0f };
+    skeletonIdle = { 0, 1, 1, 8.0f };
+
     player = new gameObject("Player", &playerTexture);
     player->setPosition(100.0f, 100.0f);
-    player->setSheet(156, 288, 52, 72);
-    player->transform.size = { 52.0f, 72.0f };
+    player->setSheetGrid(3, 4);
+    player->transform.size = { player->frameW * 1.0f, player->frameH * 1.0f };
 
     scene.addObject(player);
     
     float enemyX = 400.0f;
     float enemyY = 300.0f;
 
+
+
     for (int i = 0; i < 7; i++) {
-        gameObject* goblin = EntityFactory::createEnemy(scene, "Goblin", &enemyTexture, { enemyX, enemyY });
-        enemies.push_back(goblin);
+        gameObject* skeleton = EntityFactory::createEnemy(scene, "Skeleton", &enemyTexture, { enemyX, enemyY });
+        skeleton->setSheetGrid(12, 8);
+        skeleton->transform.size = { skeleton->frameW * 1.0f, skeleton->frameH * 1.0f };
+        skeleton->play(skeletonWalkRight);
+
+        enemies.push_back(skeleton);
         enemyX += 50;
         enemyY += 50;
     }
@@ -146,8 +158,8 @@ void Game::render() {
     ImGui::DragFloat2("Player Pos", &player->transform.position.x, 1.0f);
     if (!enemies.empty()) {
         ImGui::Separator();
-        ImGui::Text("Goblin Controls");
-        ImGui::DragFloat2("Goblin Pos", &enemies[0]->transform.position.x, 1.0f);
+        ImGui::Text("Skeleton Controls");
+        ImGui::DragFloat2("Skeleton Pos", &enemies[0]->transform.position.x, 1.0f);
     }
     ImGui::End();
 

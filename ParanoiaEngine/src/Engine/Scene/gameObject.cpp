@@ -53,6 +53,13 @@ void gameObject::setSheet(int tw, int th, int fw, int fh) {
     frameH = fh;
 }
 
+void gameObject::setSheetGrid(int cols, int rows) {
+    texW = texture->width;
+    texH = texture->height;
+    frameW = texW / cols;
+    frameH = texH / rows;
+}
+
 void gameObject::setFrame(int col, int row) {
     uvMin = { col * frameW / (float)texW, row * frameH / (float)texH };
     uvMax = { (col + 1) * frameW / (float)texW, (row + 1) * frameH / (float)texH };
