@@ -19,11 +19,20 @@ private:
     void update(float dt);
     void render();
 
+    bool showHitboxes = true;
+    void drawHitboxes();
+
     Window window;
     batchRenderer renderer;
     Camera camera;
     Scene scene;
     Input input;
+
+    Animation playerWalkDown;
+    Animation playerWalkLeft;
+    Animation playerWalkRight;
+    Animation playerWalkUp;
+    Animation playerIdle;
 
     Texture playerTexture;
     Texture enemyTexture;

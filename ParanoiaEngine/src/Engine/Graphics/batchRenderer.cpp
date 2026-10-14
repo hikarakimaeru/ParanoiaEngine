@@ -60,7 +60,7 @@ void batchRenderer::beginBatch(const Camera& camera) {
     buffer_ptr = vertices_buffer.data();
 }
 
-void batchRenderer::drawQuad(glm::vec2 position, glm::vec2 size, glm::vec4 color) {
+void batchRenderer::drawQuad(glm::vec2 position, glm::vec2 size, glm::vec4 color, glm::vec2 uvMin, glm::vec2 uvMax) {
     if (buffer_ptr == nullptr || currentCamera == nullptr) return;
 
     if (static_cast<size_t>(buffer_ptr - vertices_buffer.data()) >= MAX_VERTICES) {
@@ -74,10 +74,10 @@ void batchRenderer::drawQuad(glm::vec2 position, glm::vec2 size, glm::vec4 color
     float h = size.y;
 
     glm::vec2 texCoords[4] = {
-        { 0.0f, 0.0f },
-        { 1.0f, 0.0f },
-        { 1.0f, 1.0f },
-        { 0.0f, 1.0f }
+        { uvMin.x, uvMin.y},
+        { uvMax.x, uvMin.y},
+        { uvMax.x, uvMax.y},
+        { uvMin.x, uvMax.y}
     };
 
     buffer_ptr->position = { x, y };

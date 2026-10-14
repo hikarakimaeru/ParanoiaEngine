@@ -18,3 +18,4 @@ void Camera::recalculate() {
 	view_matrix = glm::translate(glm::mat4(1.0f), -position);
 	view_projection_matrix = projection_matrix * view_matrix;
 }
+

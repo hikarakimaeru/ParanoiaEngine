@@ -10,7 +10,7 @@ public:
 		gameObject* enemy = new gameObject(name, texture);
 
 		enemy->setPosition(position);
-		enemy->transform.size = { 64.0f, 64.0f };
+		enemy->transform.size = { 72.0f, 72.0f };
 
 		scene.addObject(enemy);
 

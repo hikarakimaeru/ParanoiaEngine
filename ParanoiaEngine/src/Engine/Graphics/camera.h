@@ -9,6 +9,8 @@ public:
 
 	const glm::mat4& getViewProjectionMatrix() const;
 
+	const glm::vec3& getPosition() const { return position; }
+
 private:
 	void recalculate();
 

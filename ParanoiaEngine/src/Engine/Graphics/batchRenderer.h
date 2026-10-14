@@ -38,6 +38,6 @@ public:
 
     void init(int width, int height);
     void beginBatch(const Camera& camera);
-    void drawQuad(glm::vec2 position, glm::vec2 size, glm::vec4 color = glm::vec4(1.0f));
+    void drawQuad(glm::vec2 position, glm::vec2 size, glm::vec4 color = glm::vec4(1.0f), glm::vec2 uvMin = {0.0f, 0.0f}, glm::vec2 uvMax = {1.0f, 1.0f});
     void flush();
 };
