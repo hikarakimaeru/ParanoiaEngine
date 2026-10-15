@@ -46,5 +46,9 @@ private:
     gameObject* player = nullptr;
     std::vector<gameObject*> enemies; 
 
+    float enemySpeed = 80.0f;
+    int playerHp = 100;
+    float hitCooldown = 0.0f;
+
     bool running = true;
 };

@@ -8,6 +8,7 @@
 #include <iostream>
 #include "../Engine/Core/collider.h"
 #include "../Engine/Scene/entityFactory.h"
+#include <cmath>
 
 Game::Game()
     : window("ParanoiaEngine - Game Sandbox", 800, 600),
@@ -45,9 +46,7 @@ Game::Game()
     float enemyX = 400.0f;
     float enemyY = 300.0f;
 
-
-
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 1; i++) {
         gameObject* skeleton = EntityFactory::createEnemy(scene, "Skeleton", &enemyTexture, { enemyX, enemyY });
         skeleton->setSheetGrid(12, 8);
         skeleton->transform.size = { skeleton->frameW * 1.0f, skeleton->frameH * 1.0f };
@@ -82,11 +81,18 @@ void Game::run() {
 
         processInput(dt);
         update(dt);
+        hitCooldown -= dt;
         for (gameObject* goblin : enemies) {
-            if (Collider::checkCollision(*player, *goblin)) {
+            if (hitCooldown <= 0.0f && Collider::checkCollision(*player, *goblin)) {
                 //Collider::resolveCollision(*player, *goblin);
+                playerHp -= 10;
+                hitCooldown = 1.0f;
                 std::cout << "Hit!" << std::endl;
             }
+        }
+        if (playerHp <= 0) {
+            playerHp = 100;
+            player->setPosition(100.0f, 100.0f); // простой рестарт
         }
         render();
 
@@ -122,6 +128,31 @@ void Game::update(float dt) {
         player->getPosition().y - (600.0f / 2.0f),
         0.0f
     ));
+
+    for (gameObject* e : enemies) {
+        float dx = player->transform.position.x - e->transform.position.x;
+        float dy = player->transform.position.y - e->transform.position.y;
+
+        float len = std::sqrt(dx * dx + dy * dy);
+        if (std::abs(dx) > std::abs(dy)) {
+            if (dx / len > 0) {
+                e->play(skeletonWalkRight);
+            }
+            else if (dx / len < 0) {
+                e->play(skeletonWalkLeft);
+            }
+        }
+        else {
+            if (dy / len > 0) {
+                e->play(skeletonWalkDown);
+            }
+            else if (dy / len < 0) {
+                e->play(skeletonWalkUp);
+            }
+        }
+        e->transform.position.x += dx / len * enemySpeed * dt;
+        e->transform.position.y += dy / len * enemySpeed * dt;
+    }
 }
 
 void Game::drawHitboxes() {
@@ -161,6 +192,7 @@ void Game::render() {
         ImGui::Text("Skeleton Controls");
         ImGui::DragFloat2("Skeleton Pos", &enemies[0]->transform.position.x, 1.0f);
     }
+    ImGui::Text("HP: %d", playerHp);
     ImGui::End();
 
     scene.draw(renderer, camera);
