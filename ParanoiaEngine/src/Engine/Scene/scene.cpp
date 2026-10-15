@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "../Graphics/batchRenderer.h"
+#include <algorithm>
 
 Scene::~Scene() {
     clear();
@@ -50,4 +51,14 @@ void Scene::clear() {
         delete obj;
     }
     objects.clear();
+}
+
+void Scene::removeObject(gameObject* obj) {
+    for (size_t i = 0; i < objects.size(); i++) {
+        if (objects[i] == obj) {
+            delete objects[i];
+            objects.erase(objects.begin() + i);
+            return;
+        }
+    }
 }

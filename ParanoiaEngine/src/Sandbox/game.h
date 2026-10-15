@@ -49,6 +49,7 @@ private:
     float enemySpeed = 80.0f;
     int playerHp = 100;
     float hitCooldown = 0.0f;
+    float attackRadius = 80.0f;
 
     bool running = true;
 };

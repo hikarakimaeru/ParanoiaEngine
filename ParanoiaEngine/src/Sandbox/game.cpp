@@ -81,6 +81,7 @@ void Game::run() {
 
         processInput(dt);
         update(dt);
+
         hitCooldown -= dt;
         for (gameObject* goblin : enemies) {
             if (hitCooldown <= 0.0f && Collider::checkCollision(*player, *goblin)) {
@@ -110,6 +111,28 @@ void Game::processInput(float dt) {
         if (input.isHeld(SDL_SCANCODE_S)) { player->move(0.0f, speed * dt); moving = true; }
         if (input.isHeld(SDL_SCANCODE_A)) { player->move(-speed * dt, 0.0f); moving = true; }
         if (input.isHeld(SDL_SCANCODE_D)) { player->move(speed * dt, 0.0f); moving = true; }
+
+        if (input.isHeld(SDL_SCANCODE_SPACE)) {
+            float px = player->transform.position.x + player->transform.size.x / 2;
+            float py = player->transform.position.y + player->transform.size.y / 2;
+
+            for (size_t i = 0; i < enemies.size();) {
+                gameObject* e = enemies[i];
+
+                float dx = e->transform.position.x + e->transform.size.x / 2 - px;
+                float dy = e->transform.position.y + e->transform.size.y / 2 - py;
+
+                float dist = std::sqrt(dx * dx + dy * dy);
+
+                if (dist < attackRadius) {
+                    scene.removeObject(e);
+                    enemies.erase(enemies.begin() + i);
+                }
+                else {
+                    i++;
+                }
+            }
+        }
 
         if (input.isHeld(SDL_SCANCODE_A))      player->play(playerWalkLeft);
         else if (input.isHeld(SDL_SCANCODE_D)) player->play(playerWalkRight);
@@ -196,6 +219,7 @@ void Game::render() {
     ImGui::End();
 
     scene.draw(renderer, camera);
+
     drawHitboxes();
     
     ImGui::Render();

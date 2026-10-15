@@ -16,6 +16,7 @@ public:
     ~Scene();
 
     void addObject(gameObject* obj);
+    void removeObject(gameObject* obj);
 
     void update(float dt);
 
