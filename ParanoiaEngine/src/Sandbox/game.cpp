@@ -14,7 +14,8 @@ Game::Game()
     : window("ParanoiaEngine - Game Sandbox", 800, 600),
     camera(0.0f, 800.0f, 600.0f, 0.0f),
     playerTexture("assets/reaper_blade_2.png"),
-    enemyTexture("assets/dotd_skeletonsheet_2.png")
+    enemyTexture("assets/dotd_skeletonsheet_2.png"),
+    floorTexture("assets/block.png")
 {
     renderer.init(800, 600);
 
@@ -36,8 +37,18 @@ Game::Game()
     skeletonWalkUp = { 3, 0, 3, 8.0f };
     skeletonIdle = { 0, 1, 1, 8.0f };
 
+    for (int row = 0; row < 30; row++) {
+        for (int col = 0; col < 30; col++) {
+            gameObject* tile = new gameObject("Tile", &floorTexture);
+            tile->setSheetGrid(1, 1);
+            tile->transform.size = { 64.0f, 64.0f };
+            tile->setPosition(col * 64.0f, row * 64.0f);
+            scene.addObject(tile);
+        }
+    }
+
     player = new gameObject("Player", &playerTexture);
-    player->setPosition(100.0f, 100.0f);
+    player->setPosition(960.0f, 960.0f);
     player->setSheetGrid(3, 4);
     player->transform.size = { player->frameW * 1.0f, player->frameH * 1.0f };
 
@@ -78,7 +89,7 @@ void Game::run() {
             }
             input.processEvent(event);
         }
-
+        
         processInput(dt);
         update(dt);
 
@@ -107,12 +118,21 @@ void Game::processInput(float dt) {
     bool moving = false;
 
     if (!io.WantCaptureKeyboard) {
-        if (input.isHeld(SDL_SCANCODE_W)) { player->move(0.0f, -speed * dt); moving = true; }
-        if (input.isHeld(SDL_SCANCODE_S)) { player->move(0.0f, speed * dt); moving = true; }
-        if (input.isHeld(SDL_SCANCODE_A)) { player->move(-speed * dt, 0.0f); moving = true; }
-        if (input.isHeld(SDL_SCANCODE_D)) { player->move(speed * dt, 0.0f); moving = true; }
+        glm::vec2 dir(0.0f, 0.0f);
 
-        if (input.isHeld(SDL_SCANCODE_SPACE)) {
+        if (input.isHeld(SDL_SCANCODE_W)) { dir.y -= 1.0f; }
+        if (input.isHeld(SDL_SCANCODE_S)) { dir.y += 1.0f; }
+        if (input.isHeld(SDL_SCANCODE_A)) { dir.x -= 1.0f; }
+        if (input.isHeld(SDL_SCANCODE_D)) { dir.x += 1.0f; }
+
+        if (dir.x != 0.0f || dir.y != 0.0f) {
+            dir = glm::normalize(dir);
+            player->move(dir.x * speed * dt, dir.y * speed * dt);
+            moving = true;
+        }
+
+        attackCooldown -= dt;
+        if (attackCooldown <= 0.0f && input.isHeld(SDL_SCANCODE_SPACE)) {
             float px = player->transform.position.x + player->transform.size.x / 2;
             float py = player->transform.position.y + player->transform.size.y / 2;
 
@@ -132,6 +152,8 @@ void Game::processInput(float dt) {
                     i++;
                 }
             }
+            std::printf("attack!\n");
+            attackCooldown = 1.5f;
         }
 
         if (input.isHeld(SDL_SCANCODE_A))      player->play(playerWalkLeft);
@@ -208,7 +230,7 @@ void Game::render() {
 
     ImGui::Begin("Engine Inspector");
     ImGui::Checkbox("Show Hitboxes", &showHitboxes);
-    ImGui::Text("Player Controls");
+    ImGui::Text("Player Controls"); 
     ImGui::DragFloat2("Player Pos", &player->transform.position.x, 1.0f);
     if (!enemies.empty()) {
         ImGui::Separator();

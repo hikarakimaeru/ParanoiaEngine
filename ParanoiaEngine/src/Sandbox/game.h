@@ -28,6 +28,8 @@ private:
     Scene scene;
     Input input;
 
+    Texture floorTexture;
+
     Animation playerWalkDown;
     Animation playerWalkLeft;
     Animation playerWalkRight;
@@ -50,6 +52,7 @@ private:
     int playerHp = 100;
     float hitCooldown = 0.0f;
     float attackRadius = 80.0f;
+    float attackCooldown = 1.5f;
 
     bool running = true;
 };
