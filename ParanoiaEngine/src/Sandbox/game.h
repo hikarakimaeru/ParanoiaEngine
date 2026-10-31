@@ -21,6 +21,7 @@ private:
 
     bool showHitboxes = true;
     void drawHitboxes();
+    void drawBackground();
 
     Window window;
     batchRenderer renderer;
@@ -47,6 +48,10 @@ private:
 
     gameObject* player = nullptr;
     std::vector<gameObject*> enemies; 
+
+    const float TILE_SIZE = 32.0f;
+    const float SCREEN_W = 800.0f;
+    const float SCREEN_H = 600.0f;
 
     float enemySpeed = 80.0f;
     int playerHp = 100;

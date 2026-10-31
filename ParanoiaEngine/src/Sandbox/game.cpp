@@ -37,16 +37,6 @@ Game::Game()
     skeletonWalkUp = { 3, 0, 3, 8.0f };
     skeletonIdle = { 0, 1, 1, 8.0f };
 
-    for (int row = 0; row < 30; row++) {
-        for (int col = 0; col < 30; col++) {
-            gameObject* tile = new gameObject("Tile", &floorTexture);
-            tile->setSheetGrid(1, 1);
-            tile->transform.size = { 64.0f, 64.0f };
-            tile->setPosition(col * 64.0f, row * 64.0f);
-            scene.addObject(tile);
-        }
-    }
-
     player = new gameObject("Player", &playerTexture);
     player->setPosition(960.0f, 960.0f);
     player->setSheetGrid(3, 4);
@@ -74,6 +64,18 @@ Game::~Game() {
     ImGui_ImplSDL3_Shutdown();
     ImGui::DestroyContext();
 }
+
+void Game::drawBackground() {
+    glm::vec3 cam = camera.getPosition();
+    glm::vec2 uvMin = { cam.x / TILE_SIZE, cam.y / TILE_SIZE };
+    glm::vec2 uvMax = { uvMin.x + SCREEN_W / TILE_SIZE, uvMin.y + SCREEN_H / TILE_SIZE };
+
+    renderer.beginBatch(camera);
+    floorTexture.bind(0);
+    renderer.drawQuad({ cam.x, cam.y }, { SCREEN_W, SCREEN_H }, { 1, 1, 1, 1 }, uvMin, uvMax);
+    renderer.flush();
+}
+
 
 void Game::run() {
     SDL_Event event;
@@ -240,6 +242,7 @@ void Game::render() {
     ImGui::Text("HP: %d", playerHp);
     ImGui::End();
 
+    drawBackground();
     scene.draw(renderer, camera);
 
     drawHitboxes();
