@@ -22,6 +22,7 @@ private:
     bool showHitboxes = true;
     void drawHitboxes();
     void drawBackground();
+    void spawnWaves(float dt);
 
     Window window;
     batchRenderer renderer;
@@ -53,6 +54,7 @@ private:
     const float SCREEN_W = 800.0f;
     const float SCREEN_H = 600.0f;
 
+    float waveCooldown = 5.0f;
     float enemySpeed = 80.0f;
     int playerHp = 100;
     float hitCooldown = 0.0f;

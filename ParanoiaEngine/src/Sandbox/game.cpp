@@ -9,6 +9,7 @@
 #include "../Engine/Core/collider.h"
 #include "../Engine/Scene/entityFactory.h"
 #include <cmath>
+#include <random>
 
 Game::Game()
     : window("ParanoiaEngine - Game Sandbox", 800, 600),
@@ -42,21 +43,7 @@ Game::Game()
     player->setSheetGrid(3, 4);
     player->transform.size = { player->frameW * 1.0f, player->frameH * 1.0f };
 
-    scene.addObject(player);
-    
-    float enemyX = 400.0f;
-    float enemyY = 300.0f;
-
-    for (int i = 0; i < 1; i++) {
-        gameObject* skeleton = EntityFactory::createEnemy(scene, "Skeleton", &enemyTexture, { enemyX, enemyY });
-        skeleton->setSheetGrid(12, 8);
-        skeleton->transform.size = { skeleton->frameW * 1.0f, skeleton->frameH * 1.0f };
-        skeleton->play(skeletonWalkRight);
-
-        enemies.push_back(skeleton);
-        enemyX += 50;
-        enemyY += 50;
-    }
+    scene.addObject(player);   
 }
 
 Game::~Game() {
@@ -94,6 +81,8 @@ void Game::run() {
         
         processInput(dt);
         update(dt);
+
+        spawnWaves(dt);
 
         hitCooldown -= dt;
         for (gameObject* goblin : enemies) {
@@ -171,8 +160,8 @@ void Game::update(float dt) {
     scene.update(dt);
 
     camera.setPosition(glm::vec3(
-        player->getPosition().x - (800.0f / 2.0f),
-        player->getPosition().y - (600.0f / 2.0f),
+        player->getPosition().x - (SCREEN_W / 2.0f),
+        player->getPosition().y - (SCREEN_H / 2.0f),
         0.0f
     ));
 
@@ -181,6 +170,7 @@ void Game::update(float dt) {
         float dy = player->transform.position.y - e->transform.position.y;
 
         float len = std::sqrt(dx * dx + dy * dy);
+        if (len < 0.001f) continue;
         if (std::abs(dx) > std::abs(dy)) {
             if (dx / len > 0) {
                 e->play(skeletonWalkRight);
@@ -249,4 +239,38 @@ void Game::render() {
     
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void Game::spawnWaves(float dt) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    glm::vec3 cam = camera.getPosition();
+
+    std::uniform_real_distribution<float> sideDist(0, 1);
+    std::uniform_real_distribution<float> yDist(0, SCREEN_H);
+
+    waveCooldown -= dt;
+    if (waveCooldown <= 0.0f) {
+        for (int i = 0; i < 2; i++) {
+            int side = sideDist(gen);
+            float x = 0.0f;
+
+            if (side < 0.5f) {
+                x = cam.x - 100.0f;
+            }
+            else {
+                x = cam.x + 900.0f;
+            }
+
+            int y = cam.y + yDist(gen);
+
+            gameObject* skeleton = EntityFactory::createEnemy(scene, "Skeleton", &enemyTexture, { x, y });
+            skeleton->setSheetGrid(12, 8);
+            skeleton->transform.size = { skeleton->frameW * 1.0f, skeleton->frameH * 1.0f };
+            skeleton->play(skeletonWalkRight);
+            enemies.push_back(skeleton);
+        }
+        waveCooldown = 5.0f;
+    }
 }
