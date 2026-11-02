@@ -16,7 +16,8 @@ Game::Game()
     camera(0.0f, 800.0f, 600.0f, 0.0f),
     playerTexture("assets/reaper_blade_2.png"),
     enemyTexture("assets/dotd_skeletonsheet_2.png"),
-    floorTexture("assets/block.png")
+    floorTexture("assets/block.png"),
+    HPBarTexture("assets/HPBar.png")
 {
     renderer.init(800, 600);
 
@@ -44,6 +45,11 @@ Game::Game()
     player->transform.size = { player->frameW * 1.0f, player->frameH * 1.0f };
 
     scene.addObject(player);   
+
+    HPBar = new gameObject("HP bar", &HPBarTexture);
+    HPBar->setSheetGrid(7, 15);
+    HPBar->transform.size = { HPBar->frameW * 4.0f, HPBar->frameH * 4.0f };
+    scene.addObject(HPBar);
 }
 
 Game::~Game() {
@@ -95,7 +101,7 @@ void Game::run() {
         }
         if (playerHp <= 0) {
             playerHp = 100;
-            player->setPosition(100.0f, 100.0f); // простой рестарт
+            restart();
         }
         render();
 
@@ -164,6 +170,20 @@ void Game::update(float dt) {
         player->getPosition().y - (SCREEN_H / 2.0f),
         0.0f
     ));
+
+    glm::vec3 cam = camera.getPosition();
+    HPBar->setPosition(cam.x + 20.0f, cam.y + SCREEN_H - 75.0f);
+
+    int hp = playerHp;
+    if (hp < 0) hp = 0;
+    if (hp > 100) hp = 100;
+
+    int step = (100 - hp) / 17;
+
+    if (step != lastHpStep) {
+        HPBar->play({ 0, 1 + step, 1, 1.0f });
+        lastHpStep = step;
+    }
 
     for (gameObject* e : enemies) {
         float dx = player->transform.position.x - e->transform.position.x;
@@ -252,8 +272,8 @@ void Game::spawnWaves(float dt) {
 
     waveCooldown -= dt;
     if (waveCooldown <= 0.0f) {
-        for (int i = 0; i < 2; i++) {
-            int side = sideDist(gen);
+        for (int i = 0; i < 3 + n_wave; i++) {
+            float side = sideDist(gen);
             float x = 0.0f;
 
             if (side < 0.5f) {
@@ -272,5 +292,17 @@ void Game::spawnWaves(float dt) {
             enemies.push_back(skeleton);
         }
         waveCooldown = 5.0f;
+        n_wave++;
     }
+}
+
+void Game::restart() {
+    playerHp = 100;
+    player->setPosition(960.0f, 960.0f);
+    for (gameObject* e : enemies) {
+        scene.removeObject(e);
+    }
+    enemies.clear();
+    waveCooldown = 5.0f;
+    n_wave = 0;
 }
