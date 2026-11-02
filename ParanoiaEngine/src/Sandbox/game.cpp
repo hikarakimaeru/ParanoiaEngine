@@ -17,7 +17,8 @@ Game::Game()
     playerTexture("assets/reaper_blade_2.png"),
     enemyTexture("assets/dotd_skeletonsheet_2.png"),
     floorTexture("assets/block.png"),
-    HPBarTexture("assets/HPBar.png")
+    HPBarTexture("assets/HPBar.png"),
+    particleTexture("assets/particle.png")
 {
     renderer.init(800, 600);
 
@@ -97,6 +98,10 @@ void Game::run() {
                 playerHp -= 10;
                 hitCooldown = 1.0f;
                 std::cout << "Hit!" << std::endl;
+                particles.emit(
+                    { player->transform.position.x + player->transform.size.x / 2.0f,
+                      player->transform.position.y + player->transform.size.y / 2.0f },
+                    26, { 0.0f, 0.0f, 0.0f });
             }
         }
         if (playerHp <= 0) {
@@ -133,6 +138,13 @@ void Game::processInput(float dt) {
             float px = player->transform.position.x + player->transform.size.x / 2;
             float py = player->transform.position.y + player->transform.size.y / 2;
 
+            for (int i = 0; i < 16; i++) {
+                float angle = i * 6.2832f / 16.0f;
+                particles.emit(
+                    { px + std::cos(angle) * attackRadius, py + std::sin(angle) * attackRadius },
+                    4, { 0.0f, 255.0f, 0.0f });
+            }
+
             for (size_t i = 0; i < enemies.size();) {
                 gameObject* e = enemies[i];
 
@@ -141,8 +153,13 @@ void Game::processInput(float dt) {
 
                 float dist = std::sqrt(dx * dx + dy * dy);
 
-                if (dist < attackRadius) {
+                if (dist < attackRadius + e->transform.size.x / 2.0f) {
+                    particles.emit(
+                        { e->transform.position.x + e->transform.size.x / 2.0f,
+                          e->transform.position.y + e->transform.size.y / 2.0f },
+                        26, { 1.0f, 0.3f, 0.3f });
                     scene.removeObject(e);
+                    kills++;
                     enemies.erase(enemies.begin() + i);
                 }
                 else {
@@ -164,6 +181,7 @@ void Game::processInput(float dt) {
 
 void Game::update(float dt) {
     scene.update(dt);
+    particles.update(dt);
 
     camera.setPosition(glm::vec3(
         player->getPosition().x - (SCREEN_W / 2.0f),
@@ -212,25 +230,6 @@ void Game::update(float dt) {
     }
 }
 
-void Game::drawHitboxes() {
-    if (!showHitboxes) return;
-
-    ImDrawList* dl = ImGui::GetBackgroundDrawList();
-    glm::vec3 camPos = camera.getPosition();         
-
-    auto drawBox = [&](gameObject* obj, ImU32 color) {
-        float x = obj->transform.position.x - camPos.x;
-        float y = obj->transform.position.y - camPos.y;
-        float w = obj->transform.size.x;
-        float h = obj->transform.size.y;
-        dl->AddRect(ImVec2(x, y), ImVec2(x + w, y + h), color, 0.0f, 0, 2.0f);
-        };
-
-    drawBox(player, IM_COL32(0, 255, 0, 255));
-    for (gameObject* e : enemies)
-        drawBox(e, IM_COL32(255, 0, 0, 255));
-}
-
 
 void Game::render() {
     glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
@@ -241,21 +240,13 @@ void Game::render() {
     ImGui::NewFrame();
 
     ImGui::Begin("Engine Inspector");
-    ImGui::Checkbox("Show Hitboxes", &showHitboxes);
-    ImGui::Text("Player Controls"); 
-    ImGui::DragFloat2("Player Pos", &player->transform.position.x, 1.0f);
-    if (!enemies.empty()) {
-        ImGui::Separator();
-        ImGui::Text("Skeleton Controls");
-        ImGui::DragFloat2("Skeleton Pos", &enemies[0]->transform.position.x, 1.0f);
-    }
-    ImGui::Text("HP: %d", playerHp);
+    ImGui::Text("Kills: %d", kills);
     ImGui::End();
 
     drawBackground();
     scene.draw(renderer, camera);
 
-    drawHitboxes();
+    particles.draw(renderer, camera, particleTexture);
     
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -305,4 +296,5 @@ void Game::restart() {
     enemies.clear();
     waveCooldown = 5.0f;
     n_wave = 0;
+    kills = 0;
 }

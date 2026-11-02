@@ -6,6 +6,7 @@
 #include "../Engine/Graphics/camera.h"
 #include "../Engine/Graphics/texture.h"
 #include "../Engine/Scene/scene.h"
+#include "../Engine/Graphics/particleSystem.h"
 
 class Game {
 public:
@@ -30,6 +31,7 @@ private:
     Camera camera;
     Scene scene;
     Input input;
+    ParticleSystem particles;
 
     Texture floorTexture;
 
@@ -48,7 +50,7 @@ private:
     Texture playerTexture;
     Texture enemyTexture;
     Texture HPBarTexture;
-
+    Texture particleTexture;
 
     gameObject* player = nullptr;
     gameObject* HPBar = nullptr;
@@ -65,7 +67,7 @@ private:
     float enemySpeed = 80.0f;
     int playerHp = 100;
     float hitCooldown = 0.0f;
-    float attackRadius = 80.0f;
+    float attackRadius = 100.0f;
     float attackCooldown = 1.5f;
     int kills = 0;
     bool running = true;

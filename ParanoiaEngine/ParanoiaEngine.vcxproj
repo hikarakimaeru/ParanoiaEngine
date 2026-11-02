@@ -136,6 +136,7 @@
     <ClCompile Include="src\Engine\Core\window.cpp" />
     <ClCompile Include="src\Engine\Graphics\batchRenderer.cpp" />
     <ClCompile Include="src\Engine\Graphics\camera.cpp" />
+    <ClCompile Include="src\Engine\Graphics\particleSystem.cpp" />
     <ClCompile Include="src\Engine\Graphics\shaderProgram.cpp" />
     <ClCompile Include="src\Engine\Graphics\texture.cpp" />
     <ClCompile Include="src\Sandbox\game.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="src\Engine\Core\window.h" />
     <ClInclude Include="src\Engine\Graphics\batchRenderer.h" />
     <ClInclude Include="src\Engine\Graphics\camera.h" />
+    <ClInclude Include="src\Engine\Graphics\particleSystem.h" />
     <ClInclude Include="src\Engine\Graphics\shaderProgram.h" />
     <ClInclude Include="src\Engine\Graphics\texture.h" />
     <ClInclude Include="src\Engine\Scene\entityFactory.h" />
