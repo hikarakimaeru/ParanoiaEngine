@@ -135,6 +135,7 @@
     <ClCompile Include="src\Engine\Core\transform.cpp" />
     <ClCompile Include="src\Engine\Core\window.cpp" />
     <ClCompile Include="src\Engine\Graphics\batchRenderer.cpp" />
+    <ClCompile Include="src\Engine\Graphics\bitmapFontRenderer.cpp" />
     <ClCompile Include="src\Engine\Graphics\camera.cpp" />
     <ClCompile Include="src\Engine\Graphics\particleSystem.cpp" />
     <ClCompile Include="src\Engine\Graphics\shaderProgram.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="src\Engine\Core\transform.h" />
     <ClInclude Include="src\Engine\Core\window.h" />
     <ClInclude Include="src\Engine\Graphics\batchRenderer.h" />
+    <ClInclude Include="src\Engine\Graphics\bitmapFontRenderer.h" />
     <ClInclude Include="src\Engine\Graphics\camera.h" />
     <ClInclude Include="src\Engine\Graphics\particleSystem.h" />
     <ClInclude Include="src\Engine\Graphics\shaderProgram.h" />

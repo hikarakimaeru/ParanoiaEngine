@@ -7,6 +7,7 @@
 #include "../Engine/Graphics/texture.h"
 #include "../Engine/Scene/scene.h"
 #include "../Engine/Graphics/particleSystem.h"
+#include "../Engine/Graphics/bitmapFontRenderer.h"
 
 class Game {
 public:
@@ -32,6 +33,7 @@ private:
     Scene scene;
     Input input;
     ParticleSystem particles;
+    BitmapFontRenderer fontRenderer;
 
     Texture floorTexture;
 
@@ -51,15 +53,16 @@ private:
     Texture enemyTexture;
     Texture HPBarTexture;
     Texture particleTexture;
+    Texture fontTexture;
 
     gameObject* player = nullptr;
     gameObject* HPBar = nullptr;
 
     std::vector<gameObject*> enemies; 
 
-    const float TILE_SIZE = 32.0f;
-    const float SCREEN_W = 800.0f;
-    const float SCREEN_H = 600.0f;
+    const float TILE_SIZE = 64.0f;
+    float SCREEN_W = 1920.0f;
+    float SCREEN_H = 1080.0f;
 
     int n_wave = 0;
     int lastHpStep = -1;

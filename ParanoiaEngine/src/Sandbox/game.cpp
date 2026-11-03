@@ -12,15 +12,29 @@
 #include <random>
 
 Game::Game()
-    : window("ParanoiaEngine - Game Sandbox", 800, 600),
-    camera(0.0f, 800.0f, 600.0f, 0.0f),
+    : window("ParanoiaEngine - Game Sandbox", 1920, 1080),
+    camera(0.0f, 1920.0f, 1080.0f, 0.0f),
     playerTexture("assets/reaper_blade_2.png"),
     enemyTexture("assets/dotd_skeletonsheet_2.png"),
-    floorTexture("assets/block.png"),
+    floorTexture("assets/floor_.png"),
     HPBarTexture("assets/HPBar.png"),
-    particleTexture("assets/particle.png")
+    particleTexture("assets/particle.png"),
+    fontTexture("assets/fonts/font_0.png")
 {
-    renderer.init(800, 600);
+    SDL_SetWindowFullscreen(window.getWin(), true);
+
+    int w = (int)SCREEN_W, h = (int)SCREEN_H;
+    SDL_GetWindowSize(window.getWin(), &w, &h);
+
+    SCREEN_W = (float)w;
+    SCREEN_H = (float)h;
+
+    fontRenderer.load("assets/fonts/font.fnt");
+
+    camera = Camera(0.0f, SCREEN_W, SCREEN_H, 0.0f);
+
+    renderer.init((int)SCREEN_W, (int)SCREEN_H);
+    glViewport(0, 0, w, h);
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -49,7 +63,7 @@ Game::Game()
 
     HPBar = new gameObject("HP bar", &HPBarTexture);
     HPBar->setSheetGrid(7, 15);
-    HPBar->transform.size = { HPBar->frameW * 4.0f, HPBar->frameH * 4.0f };
+    HPBar->transform.size = { HPBar->frameW * 5.0f, HPBar->frameH * 5.0f };
     scene.addObject(HPBar);
 }
 
@@ -190,7 +204,7 @@ void Game::update(float dt) {
     ));
 
     glm::vec3 cam = camera.getPosition();
-    HPBar->setPosition(cam.x + 20.0f, cam.y + SCREEN_H - 75.0f);
+    HPBar->setPosition(cam.x + 20.0f, cam.y + SCREEN_H - 150.0f);
 
     int hp = playerHp;
     if (hp < 0) hp = 0;
@@ -248,6 +262,14 @@ void Game::render() {
 
     particles.draw(renderer, camera, particleTexture);
     
+    glm::vec3 cam = camera.getPosition();
+    std::string scoreText = "Kills: " + std::to_string(kills);
+
+    float textWidth = 0.0f;
+
+
+    fontRenderer.renderText(renderer, camera, fontTexture, scoreText, cam.x + (SCREEN_W / 2) - 50.0f, cam.y + 40.0f);
+
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
@@ -271,7 +293,7 @@ void Game::spawnWaves(float dt) {
                 x = cam.x - 100.0f;
             }
             else {
-                x = cam.x + 900.0f;
+                x = cam.x + SCREEN_W + 100.0f;
             }
 
             int y = cam.y + yDist(gen);
